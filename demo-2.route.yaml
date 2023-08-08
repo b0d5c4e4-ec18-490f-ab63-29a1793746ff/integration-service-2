@@ -1,0 +1,19 @@
+# camel-k: language=yaml
+# camel-k: trait=logging.enabled=true
+# camel-k: trait=logging.json=true
+# camel-k: trait=telemetry.enabled=true
+# camel-k: trait=telemetry.endpoint=http://jaeger-collector:4317
+
+- route:
+    id: demo-route-2
+    group: demo-group-2
+    from:
+      uri: "rest:get:/api/json"
+      id: rest-api-json-2
+      steps:
+        - setHeader:
+            constant: application/json
+            name: Content-Type
+        - setBody:
+            simple: '{"json": "Hello ${header.name}!"}'
+        - to: "log:info?showAll=true&multiline=true"
