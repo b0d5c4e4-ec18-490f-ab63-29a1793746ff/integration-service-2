@@ -24,7 +24,7 @@ spec:
                           disabled: false
                           exceptionType: java.lang.IllegalArgumentException
                           id: throw-exception-2
-                          message: Force ERRO!!!!!!!R (IllegalArgumentException)
+                          message: Force ERROR (IllegalArgumentException)
           uri: rest:get:/api/json/{state}
         group: demo-group-2
         id: demo-route-2
