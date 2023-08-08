@@ -1,0 +1,38 @@
+apiVersion: camel.apache.org/v1
+kind: Integration
+metadata:
+  name: demo-2
+spec:
+  flows:
+    - route:
+        from:
+          id: rest-api-json-2
+          steps:
+            - choice:
+                otherwise:
+                  steps:
+                    - setHeader:
+                        constant: application/json
+                        name: Content-Type
+                    - setBody:
+                        simple: '{"json": "Hello ${header.name}!"}'
+                    - to: log:info?showAll=true&multiline=true
+                when:
+                  - simple: ${header.state} == 0
+                    steps:
+                      - throwException:
+                          disabled: false
+                          exceptionType: java.lang.IllegalArgumentException
+                          id: throw-exception-2
+                          message: Force ERROR (IllegalArgumentException)
+          uri: rest:get:/api/json/{state}
+        group: demo-group-2
+        id: demo-route-2
+  traits:
+    addons:
+      telemetry:
+        enabled: true
+        endpoint: http://jaeger-collector:4317
+    logging:
+      enabled: true
+      json: true
